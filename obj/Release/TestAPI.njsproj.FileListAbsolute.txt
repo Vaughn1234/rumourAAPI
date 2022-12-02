@@ -1,0 +1,3 @@
+C:\Users\776616457_MP1001\Development\TestAPI\a\vaughn-rumour-mill\obj\Release\TestAPI.njsproj.AssemblyReference.cache
+C:\Users\776616457_MP1001\Development\TestAPI\a\vaughn-rumour-mill\obj\Release\TestAPI.njsproj.CoreCompileInputs.cache
+C:\Users\776616457_MP1001\Development\TestAPI\a\vaughn-rumour-mill\bin\Microsoft.NodejsTools.WebRole.dll
