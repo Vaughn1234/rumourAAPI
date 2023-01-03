@@ -12,9 +12,11 @@ sourcesGb = [];
 sourcesEs = [];
 sourcesIt = [];
 sourcesFr = [];
+transfers = [];
 
 app.get('/', (req, res) => {
-    res.json('Welcome to the Rumour Mill API.')
+    res.json('Welcome to the Rumour Mill API.');
+    SetInitialData();
     GetAllRumours();
 })
 
@@ -37,16 +39,60 @@ app.get('/sources/fr1', (req, res) => {
     res.json(sourcesFr);
 })
 
+app.get('/transfers', (req, res) => {
+    res.json(transfers);
+})
+
 function GetAllRumours() {
     setInterval(GetEsRumours, 30000);
     setInterval(GetDeRumours, 30000);
     setInterval(GetGbRumours, 30000);
     setInterval(GetItRumours, 30000);
     setInterval(GetFrRumours, 30000);
+    setInterval(GetTransfers, 500000);
 
 }
 
+function SetInitialData() {
+    GetEsRumours();
+    GetDeRumours();
+    GetGbRumours();
+    GetFrRumours();
+    GetItRumours();
+    GetTransfers();
+
+}
+
+function GetTransfers() {
+    transfers = [];
+    axios.get('https://www.transfermarkt.de/transfers/neuestetransfers/statistik/plus/?plus=1&galerie=0&wettbewerb_id=alle&land_id=&minMarktwert=1.000.000&maxMarktwert=200.000.000')
+        .then((response) => {
+            const html = response.data
+            const $ = cheerio.load(html)
+
+            const data = [...$(".items .odd, .items .even")].map(e => {
+                const row = [...$(e).find(".hauptlink")].map(e => $(e).text().trim());
+                //currentClub = $(e).find(".zentriert a").attr('title')
+                //otherRow = [...$(e).find(".zentriert a")].map(e => $(e).attr('href').trim())
+                const dateOfTransfer = [...$(e).find(".zentriert")].map(e => $(e).text().trim());
+                const transferValue = $(e).find(".rechts.hauptlink").text().trim();
+                const marketValue = [...$(e).find(".rechts")].map(e => $(e).text().trim());
+                transfers.push({
+                    playerName: row[0],
+                    transferFrom: row[1],
+                    transferTo: row[2],
+                    dateOfTransfer: dateOfTransfer[2],
+                    marketValue: marketValue[0],
+                    transferValue: transferValue
+                    //url: otherRow[1]
+
+                })
+            });
+        })
+}
+
 function GetGbRumours() {
+    sourcesGb = [];
     axios.get('https://www.transfermarkt.de/premier-league/geruechte/wettbewerb/GB1')
         .then((response) => {
             const html = response.data
@@ -111,6 +157,7 @@ function GetEsRumours() {
 }
 
 function GetItRumours() {
+    sourcesIt = [];
     axios.get('https://www.transfermarkt.de/serie-a/geruechte/wettbewerb/IT1')
         .then((response) => {
             const html = response.data
@@ -132,6 +179,7 @@ function GetItRumours() {
 }
 
 function GetFrRumours() {
+    sourcesFr = [];
     axios.get('https://www.transfermarkt.de/ligue-1/geruechte/wettbewerb/FR1')
         .then((response) => {
             const html = response.data
