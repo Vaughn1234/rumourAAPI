@@ -6,7 +6,7 @@ const { request } = require('express')
 
 const app = express()
 
-rumours = []
+rumours = [];
 sourcesDe = [];
 sourcesGb = [];
 sourcesEs = [];
@@ -14,10 +14,11 @@ sourcesIt = [];
 sourcesFr = [];
 transfers = [];
 
+SetInitialData();
+GetAllRumours();
+
 app.get('/', (req, res) => {
     res.json('Welcome to the Rumour Mill API.');
-    SetInitialData();
-    GetAllRumours();
 })
 
 app.get('/sources/DE1', (req, res) => {
@@ -44,11 +45,12 @@ app.get('/transfers', (req, res) => {
 })
 
 function GetAllRumours() {
-    setInterval(GetEsRumours, 30000);
-    setInterval(GetDeRumours, 30000);
-    setInterval(GetGbRumours, 30000);
-    setInterval(GetItRumours, 30000);
-    setInterval(GetFrRumours, 30000);
+    let delay = 30000;
+    setInterval(GetEsRumours, delay);
+    setInterval(GetDeRumours, (delay + 3000));
+    setInterval(GetGbRumours, (delay + 4000));
+    setInterval(GetItRumours, (delay + 5000));
+    setInterval(GetFrRumours, (delay + 6000));
     setInterval(GetTransfers, 500000);
 
 }
@@ -201,63 +203,63 @@ function GetFrRumours() {
 }
 
 
-app.get('/gb/rumours', (req, res) => {
-    axios.get('https://www.transfermarkt.co.uk/rumour-mill/detail/forum/180')
-        .then((response) => {
-            rumours = []
-            const html = response.data
-            const $ = cheerio.load(html)
+//app.get('/gb/rumours', (req, res) => {
+//    axios.get('https://www.transfermarkt.co.uk/rumour-mill/detail/forum/180')
+//        .then((response) => {
+//            rumours = []
+//            const html = response.data
+//            const $ = cheerio.load(html)
 
-            $('article[class="thread"]', html).each(function () {
-                const playerName = $(this).find('.spielername').text()
-                const currentClub = $(this).find('.vereinname').text()
-                const interestedClub = $(this).find('.wechsel-verein-name-kurz').text()
-                const transferValue = $(this).find('strong').text()
-                const rawUrl = $(this).attr('itemid')
+//            $('article[class="thread"]', html).each(function () {
+//                const playerName = $(this).find('.spielername').text()
+//                const currentClub = $(this).find('.vereinname').text()
+//                const interestedClub = $(this).find('.wechsel-verein-name-kurz').text()
+//                const transferValue = $(this).find('strong').text()
+//                const rawUrl = $(this).attr('itemid')
 
-                if (playerName) {
-                    url = rawUrl.replace("transfermarkt.uk", "transfermarkt.co.uk")                    
-                    rumours.push({
-                        playerName,
-                        currentClub,
-                        interestedClub,
-                        transferValue,
-                        url
-                    })
-                }
-            })
-            res.json(rumours)
-        }).catch((err) => console.log(err))
+//                if (playerName) {
+//                    url = rawUrl.replace("transfermarkt.uk", "transfermarkt.co.uk")                    
+//                    rumours.push({
+//                        playerName,
+//                        currentClub,
+//                        interestedClub,
+//                        transferValue,
+//                        url
+//                    })
+//                }
+//            })
+//            res.json(rumours)
+//        }).catch((err) => console.log(err))
 
-})
+//})
 
-app.get('/de/rumours', (req, res) => {
-    axios.get('https://www.transfermarkt.com/rumour-mill/detail/forum/500')
-        .then((response) => {
-            rumours = []
-            const html = response.data
-            const $ = cheerio.load(html)
+//app.get('/de/rumours', (req, res) => {
+//    axios.get('https://www.transfermarkt.com/rumour-mill/detail/forum/500')
+//        .then((response) => {
+//            rumours = []
+//            const html = response.data
+//            const $ = cheerio.load(html)
 
-            $('article[class="thread"]', html).each(function () {
-                const playerName = $(this).find('.spielername').text()
-                const currentClub = $(this).find('.vereinname').text()
-                const interestedClub = $(this).find('.wechsel-verein-name-kurz').text()
-                const transferValue = $(this).find('strong').text()
-                const url = $(this).attr('itemid')
+//            $('article[class="thread"]', html).each(function () {
+//                const playerName = $(this).find('.spielername').text()
+//                const currentClub = $(this).find('.vereinname').text()
+//                const interestedClub = $(this).find('.wechsel-verein-name-kurz').text()
+//                const transferValue = $(this).find('strong').text()
+//                const url = $(this).attr('itemid')
 
-                if (playerName) {
-                    rumours.push({
-                        playerName,
-                        currentClub,
-                        interestedClub,
-                        transferValue,
-                        url
-                    })
-                }
-            })
-            res.json(rumours)
-        }).catch((err) => console.log(err))
+//                if (playerName) {
+//                    rumours.push({
+//                        playerName,
+//                        currentClub,
+//                        interestedClub,
+//                        transferValue,
+//                        url
+//                    })
+//                }
+//            })
+//            res.json(rumours)
+//        }).catch((err) => console.log(err))
 
-})
+//})
 
 app.listen(PORT, () => console.log(`server running on PORT ${PORT}`))
