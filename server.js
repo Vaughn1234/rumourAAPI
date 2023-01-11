@@ -66,8 +66,8 @@ function SetInitialData() {
 }
 
 function GetTransfers() {
-    transfers = [];
-    axios.get('https://www.transfermarkt.de/transfers/neuestetransfers/statistik/plus/?plus=1&galerie=0&wettbewerb_id=alle&land_id=&minMarktwert=1.000.000&maxMarktwert=200.000.000')
+    transfers.length = 0;
+    axios.get('https://www.transfermarkt.com/transfers/neuestetransfers/statistik/plus/?plus=1&galerie=0&wettbewerb_id=alle&land_id=&minMarktwert=1.000.000&maxMarktwert=200.000.000')
         .then((response) => {
             const html = response.data
             const $ = cheerio.load(html)
@@ -94,7 +94,7 @@ function GetTransfers() {
 }
 
 function GetGbRumours() {
-    sourcesGb = [];
+    sourcesGb.length = 0;
     axios.get('https://www.transfermarkt.de/premier-league/geruechte/wettbewerb/GB1')
         .then((response) => {
             const html = response.data
@@ -116,7 +116,7 @@ function GetGbRumours() {
 }
 
 function GetDeRumours() {
-    sourcesDe = [];
+    sourcesDe.length = 0;
     axios.get('https://www.transfermarkt.de/bundesliga/geruechte/wettbewerb/L1')
         .then((response) => {
             const html = response.data
@@ -138,7 +138,7 @@ function GetDeRumours() {
 }
 
 function GetEsRumours() {
-    sourcesEs = [];
+    sourcesEs.length = 0;
     axios.get('https://www.transfermarkt.de/laliga/geruechte/wettbewerb/ES1')
         .then((response) => {
             const html = response.data
@@ -159,7 +159,7 @@ function GetEsRumours() {
 }
 
 function GetItRumours() {
-    sourcesIt = [];
+    sourcesIt.length = 0;
     axios.get('https://www.transfermarkt.de/serie-a/geruechte/wettbewerb/IT1')
         .then((response) => {
             const html = response.data
@@ -181,7 +181,7 @@ function GetItRumours() {
 }
 
 function GetFrRumours() {
-    sourcesFr = [];
+    sourcesFr.length = 0;
     axios.get('https://www.transfermarkt.de/ligue-1/geruechte/wettbewerb/FR1')
         .then((response) => {
             const html = response.data
