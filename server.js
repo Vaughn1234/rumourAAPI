@@ -14,8 +14,9 @@ sourcesIt = [];
 sourcesFr = [];
 transfers = [];
 
-SetInitialData();
-GetAllRumours();
+GetData();
+setInterval(GetData, 30000);
+//GetAllRumours();
 
 app.get('/', (req, res) => {
     res.json('Welcome to the Rumour Mill API.');
@@ -55,7 +56,7 @@ function GetAllRumours() {
 
 }
 
-function SetInitialData() {
+function GetData() {
     GetEsRumours();
     GetDeRumours();
     GetGbRumours();
